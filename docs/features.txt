@@ -1,0 +1,28 @@
+Views
+    The change we have here is to use a folder structure standard for views, where 
+    we have a Views/pages folder for all the pages, Views/layouts for layouts and commands to support this
+
+Events
+    Events to be used as defined in ebenezer
+
+Repositories
+    As defined in ebenezer
+
+Model Facade
+    Use a single helper function that tkaes in the model class and returns the ModelFacade with the static 
+    methods defined usin php docs
+
+BaseEntity idea
+    Defined as in ebenezer
+
+Libraries
+    Some important Libraries like
+        Arr - For array manipulation
+        RandomGenerator
+        EmailTemplate to be used with maizzle directly
+
+CSRF handling
+    as defined in ebenezer
+
+Email Queues concept
+    as defined in ebenezer

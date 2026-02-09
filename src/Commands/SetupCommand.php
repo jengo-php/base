@@ -56,6 +56,22 @@ class SetupCommand extends BaseCommand
      */
     public function run(array $params)
     {
+        // inform of destructive nature of the command
+
+        $options = ['y', 'n'];
+
+        $ans = CLI::prompt(
+            'This is a destructive command, do you wish to continue?',
+            $options,
+            ["in_list[" . implode(',', $options) . "]"]
+        );
+
+        if (!in_array(strtolower($ans), ['y', 'yes'])) {
+            CLI::newLine();
+            CLI::write('Setup terminated successfully!', 'yellow');
+            return;
+        }
+
         // 1. setup the page system
         //  a. create partials
         $this->createPartials();
@@ -73,6 +89,9 @@ class SetupCommand extends BaseCommand
         $this->editHomeController();
 
         // 2.  add the jengo helper to the autoload file
+
+        CLI::newLine();
+        CLI::write('Setup completed successfully!', 'green');
     }
 
     private function createPartials(): void
@@ -137,6 +156,7 @@ class SetupCommand extends BaseCommand
     private function editHomeController(): void
     {
         $path = APPPATH . "Controllers/Home.php";
+        $welcomePagePath = APPPATH . "Views/welcome_message.php";
 
         $content = "<?php
 
@@ -150,8 +170,13 @@ class Home extends BaseController
     }
 }";
 
+
         if (file_exists($path)) {
             unlink($path);
+        } 
+        
+        if (file_exists($welcomePagePath)) {
+            unlink($welcomePagePath);
         }
 
         file_put_contents($path, $content);

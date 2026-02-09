@@ -127,6 +127,24 @@ class MakePageCommand extends BaseCommand
 
         $segments = explode(DIRECTORY_SEPARATOR, $path);
 
+        for ($i=0; $i < count($segments); $i++) {
+            $y = $i;
+            $seg = $segments[$y];
+            $segNext = $segments[++$y] ?? null;
+
+            if ($seg === 'Views' && $segNext === 'pages') {
+                while ($y < count($segments)) {
+                    $seg = $segments[$y];
+                    $segments[$y] = strtolower($seg);
+                    $y++;
+                }
+
+                break;
+            }
+
+            continue;
+        }
+
         $lastPos = count($segments) - 1;
 
         $filename = lcfirst($segments[$lastPos]);

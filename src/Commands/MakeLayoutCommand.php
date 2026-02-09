@@ -72,8 +72,6 @@ class MakeLayoutCommand extends BaseCommand
 
         $isBase = array_key_exists('base', $params);
 
-        CLI::write(json_encode($params));
-
         $templateName = $isBase ? 'base' : 'main';
         $template = $isBase ? 'base.tpl.php' : 'layout.tpl.php';
 
@@ -114,6 +112,24 @@ class MakeLayoutCommand extends BaseCommand
         }
 
         $segments = explode(DIRECTORY_SEPARATOR, $path);
+
+        for ($i=0; $i < count($segments); $i++) {
+            $y = $i;
+            $seg = $segments[$y];
+            $segNext = $segments[++$y] ?? null;
+
+            if ($seg === 'Views' && $segNext === 'layouts') {
+                while ($y < count($segments)) {
+                    $seg = $segments[$y];
+                    $segments[$y] = strtolower($seg);
+                    $y++;
+                }
+
+                break;
+            }
+
+            continue;
+        }
 
         $lastPos = count($segments) - 1;
 

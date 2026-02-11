@@ -26,3 +26,8 @@ CSRF handling
 
 Email Queues concept
     as defined in ebenezer
+
+Installers:
+    vite
+    maizzle
+    inertia

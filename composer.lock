@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b7ed6159abbf513ec0de27010bf0a15",
+    "content-hash": "9943befab452c2c7c2858e203d12b320",
     "packages": [
         {
             "name": "codeigniter4/framework",
@@ -206,6 +206,44 @@
                 }
             ],
             "time": "2025-10-14T18:31:13+00:00"
+        },
+        {
+            "name": "mindplay/php-vite",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mindplay-dk/php-vite.git",
+                "reference": "4c41d9d14410e0bb44254def476e66e068205a9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mindplay-dk/php-vite/zipball/4c41d9d14410e0bb44254def476e66e068205a9a",
+                "reference": "4c41d9d14410e0bb44254def476e66e068205a9a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "mindplay/testies": "^1.1",
+                "phpunit/php-code-coverage": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mindplay\\vite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MPL-2.0"
+            ],
+            "description": "a lightweight PHP-backend integration for the Vite frontend build tool",
+            "support": {
+                "issues": "https://github.com/mindplay-dk/php-vite/issues",
+                "source": "https://github.com/mindplay-dk/php-vite/tree/1.1.0"
+            },
+            "time": "2025-10-19T12:21:52+00:00"
         },
         {
             "name": "psr/container",

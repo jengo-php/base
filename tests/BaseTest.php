@@ -10,6 +10,7 @@ use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\Fabricator;
 use CodeIgniter\Test\Mock\MockInputOutput;
 use Config\Database;
+use Jengo\Base\Installers\Libraries\InstallerTracker;
 use Tests\Support\Models\UserModel;
 use function PHPUnit\Framework\assertTrue;
 
@@ -22,9 +23,15 @@ class BaseTest extends CIUnitTestCase
     protected $refresh = true;
     protected $namespace = null;
 
+    private MockInputOutput $io;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->io = new MockInputOutput();
+
+        CLI::setInputOutput($this->io);
 
         $this->loadDependencies();
         $this->migrateDatabase();
@@ -35,21 +42,15 @@ class BaseTest extends CIUnitTestCase
     {
         parent::tearDown();
 
+        CLI::resetInputOutput();
+
         $this->regressDatabase();
         $this->migrateDatabase();
     }
 
     public function testMakeEventCommand(): void
     {
-        $io = new MockInputOutput();
-
-        CLI::setInputOutput($io);
-
-        $io->setInputs(['example', 'App']);
-
-        command('make:event');
-
-        CLI::resetInputOutput();
+        command('make:event example App');
 
         $dir = APPPATH . "Events";
         $path = "$dir/ExampleEvent.php";
@@ -67,13 +68,7 @@ class BaseTest extends CIUnitTestCase
 
     public function testMakeLayoutCommand(): void
     {
-        $io = new MockInputOutput();
-
-        CLI::setInputOutput($io);
-
         command('make:layout example --layout app');
-
-        CLI::resetInputOutput();
 
         $dir = APPPATH . "Views/layouts";
         $path = "$dir/example.layout.php";
@@ -91,13 +86,7 @@ class BaseTest extends CIUnitTestCase
 
     public function testMakeBaseLayoutCommand(): void
     {
-        $io = new MockInputOutput();
-
-        CLI::setInputOutput($io);
-
         command('make:layout base --base name');
-
-        CLI::resetInputOutput();
 
         $dir = APPPATH . "Views/layouts";
         $path = "$dir/base.layout.php";
@@ -115,13 +104,7 @@ class BaseTest extends CIUnitTestCase
 
     public function testMakePageCommand(): void
     {
-        $io = new MockInputOutput();
-
-        CLI::setInputOutput($io);
-
         command('make:page user');
-
-        CLI::resetInputOutput();
 
         $dir = APPPATH . "Views/pages";
         $path = "$dir/user.page.php";
@@ -139,13 +122,11 @@ class BaseTest extends CIUnitTestCase
 
     public function testSetupCommand(): void
     {
-        $io = new MockInputOutput();
-
-        CLI::setInputOutput($io);
+        $this->io->setInputs([
+            'y',
+        ]);
 
         command('jengo:setup');
-
-        CLI::resetInputOutput();
 
         $basePath = APPPATH . 'Views';
         $layoutsPath = "$basePath/layouts";
@@ -168,7 +149,7 @@ class BaseTest extends CIUnitTestCase
                     'base.layout'
                 ]
             ],
-            
+
             'pages' => [
                 'path' => $pagesPath,
                 'files' => [
@@ -180,7 +161,7 @@ class BaseTest extends CIUnitTestCase
         $this->assertFileExists("$partialsPath/" . $dirs['partials']['files'][0] . ".php");
         $this->assertFileExists("$partialsPath/" . $dirs['partials']['files'][1] . ".php");
         $this->assertFileExists("$layoutsPath/" . $dirs['layouts']['files'][0] . ".php");
-        $this->assertFileExists("$layoutsPath/" . $dirs['layouts']['files'][1] . ".php"); 
+        $this->assertFileExists("$layoutsPath/" . $dirs['layouts']['files'][1] . ".php");
         $this->assertFileExists("$pagesPath/" . $dirs['pages']['files'][0] . ".php");
 
         foreach ($dirs as $dir) {
@@ -210,7 +191,7 @@ class BaseTest extends CIUnitTestCase
     private function generateData(): void
     {
         $db = Database::connect('tests');
-        $users = new Fabricator(UserModel::class)->make(10);
+        $users = (new Fabricator(UserModel::class))->make(10);
 
         $db->table('users')->insertBatch($users);
     }

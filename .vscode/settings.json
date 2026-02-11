@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tpl.php": "txt"
+    },
+    // stop formatting .tpl.php files
+    "editor.formatOnSave": false,
+}

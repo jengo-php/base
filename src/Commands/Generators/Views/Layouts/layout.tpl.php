@@ -1,19 +1,25 @@
-<@echo $this->extend('layouts/{layout}.layout.php') ?>
+<@php
+/**
+ * @var $this \CodeIgniter\View\View
+ */
+?>
 
-<@echo $this->section('header'); ?>
+<@php $this->extend('layouts/{layout}.layout.php') ?>
+
+<@php $this->section('header'); ?>
    <@echo $this->renderSection('header'); ?>
 
    <!-- add runtime changes to the head element here -->
-<@echo $this->endSection(); ?>
+<@php $this->endSection(); ?>
 
-<@echo $this->section('content'); ?>
+<@php $this->section('content'); ?>
    <@echo $this->renderSection('content'); ?>
 
    <!-- Customize this content section as you would like -->
-<@echo $this->endSection(); ?>
+<@php $this->endSection(); ?>
 
-<@echo $this->section('footer'); ?>
+<@php $this->section('footer'); ?>
    <@echo $this->renderSection('footer'); ?>
 
    <!-- add runtime changes to the footer section here -->
-<@echo $this->endSection(); ?>
+<@php $this->endSection(); ?>

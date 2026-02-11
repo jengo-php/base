@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Jengo\Base\Vite\Config;
+
+use CodeIgniter\Config\BaseConfig;
+
+/**
+ * Tracks entrypoints and core Vite settings.
+ */
+class ViteConfig extends BaseConfig
+{
+    public array $entrypoints = [];
+
+    public array $searchPaths = [];
+
+    public function toArray(): array
+    {
+        return [
+            'entrypoints' => $this->entrypoints,
+            'searchPaths' => $this->searchPaths
+        ];
+    }
+}

@@ -104,3 +104,43 @@ if (!function_exists('page')) {
         return view("pages/$name.page.php", $data, $options);
     }
 }
+
+if(!function_exists('isProduction')) {
+    /**
+     * Checks if ENVIRONMENT is production
+     * @return bool
+     */
+    function isProduction() : bool {
+        return ENVIRONMENT === 'production';
+    }
+}
+
+if(!function_exists('isDevelopment')) {
+    /**
+     * Checks if ENVIRONMENT is development
+     * @return bool
+     */
+    function isDevelopment() : bool {
+        return ENVIRONMENT === 'development';
+    }
+}
+
+if(!function_exists('isStaging')) {
+    /**
+     * Checks if ENVIRONMENT is in staging
+     * @return bool
+     */
+    function isStaging() : bool {
+        return ENVIRONMENT === 'staging';
+    }
+}
+
+if(!function_exists('isTesting')) {
+    /**
+     * Checks if ENVIRONMENT is in testing
+     * @return bool
+     */
+    function isTesting() : bool {
+        return ENVIRONMENT === 'testing';
+    }
+}

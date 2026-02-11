@@ -1,3 +1,9 @@
+<@php
+/**
+ * @var $this \CodeIgniter\View\View
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

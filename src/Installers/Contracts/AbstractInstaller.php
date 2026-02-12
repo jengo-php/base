@@ -124,7 +124,7 @@ abstract class AbstractInstaller implements InstallerInterface
     {
         return match ($pm) {
             'pnpm' => 'pnpm install',
-            'yarn' => 'yarn install',
+            'yarn' => 'yarn add',
             default => 'npm install',
         };
     }

@@ -2,6 +2,7 @@
 
 namespace Jengo\Base;
 
+use Jengo\Base\Vite\Repositories\ViteRepository;
 use mindplay\vite\Manifest;
 
 function vite_tags()
@@ -13,10 +14,12 @@ function vite_tags()
     $vite = new Manifest(
         isDevelopment(),
         FCPATH . "dist/.vite/manifest.json",
-        isDevelopment() ? $vite_server_url : "$vite_server_url/dist/"
+        isDevelopment() ? $vite_server_url : base_url("dist/")
     );
 
-    $tags = $vite->createTags('app/main.entrypoint.ts');
+    $entrypoints = (new ViteRepository())->getFullConfig()->entrypoints;
+
+    $tags = $vite->createTags(...$entrypoints);
 
     return $tags->preload . PHP_EOL
         . $tags->css . PHP_EOL

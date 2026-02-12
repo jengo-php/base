@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Jengo\Base\Config;
 
 use CodeIgniter\Config\BaseConfig;
+use Jengo\Base\Installers\PageSystemInstaller;
 use Jengo\Base\Installers\ViteInstaller;
 
 class JengoBase extends BaseConfig
@@ -16,6 +17,6 @@ class JengoBase extends BaseConfig
      */
     public array $installers = [
         ViteInstaller::class,
-        
+        PageSystemInstaller::class,
     ];
 }

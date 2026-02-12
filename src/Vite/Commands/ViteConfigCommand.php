@@ -6,7 +6,9 @@ namespace Jengo\Base\Vite\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use Jengo\Base\Vite\Config\ViteConfig;
 use Jengo\Base\Vite\Repositories\ViteRepository;
+use Jengo\Base\Vite\ViteEntryPointScanner;
 
 class ViteConfigCommand extends BaseCommand
 {
@@ -16,8 +18,16 @@ class ViteConfigCommand extends BaseCommand
 
     public function run(array $params)
     {
+        $scanner = new ViteEntryPointScanner();
         $repo = new ViteRepository();
-        $config = $repo->getFullConfig();
+
+        // scan 
+        $config = new ViteConfig();
+
+        $config->entrypoints = $scanner->scan();
+        $config->searchPaths = $repo->loadSearchPaths();
+
+        $repo->cacheEntrypoints($config->entrypoints);
 
         // Output raw JSON so the JS plugin can parse it
         $json = json_encode($config->toArray());

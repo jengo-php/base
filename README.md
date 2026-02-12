@@ -20,6 +20,22 @@ Sets up a complete Vite environment with optional Tailwind CSS support.
 php spark jengo:install vite
 ```
 
+### Page System Installer
+
+Sets up the Page System (Layouts, Partials, Home Page).
+
+```bash
+php spark jengo:install page_system
+```
+
+## 🛠 Setup
+
+To register the Jengo helper in your application's `Autoload.php`:
+
+```bash
+php spark jengo:setup
+```
+
 ## Installation
 
 Install the package via Composer:

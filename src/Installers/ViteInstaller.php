@@ -19,6 +19,11 @@ class ViteInstaller extends AbstractInstaller
         return 'Install Vite with CI4 defaults';
     }
 
+    public static function reasonForSkipping(): string
+    {
+        return 'package.json already exists. If you want to install Vite, please remove package.json first.';
+    }
+
     public function shouldRun(): bool
     {
         return !file_exists(ROOTPATH . 'package.json');
@@ -74,6 +79,10 @@ class ViteInstaller extends AbstractInstaller
             $this->run(
                 $this->buildPackageManagerInstallCommand($pm, $dependecies)
             );
+        }
+        
+        if ($withTailwind) {
+            $this->updateViteConfig();
         }
 
         CLI::write('Vite installed successfully.', 'green');
@@ -151,5 +160,35 @@ class ViteInstaller extends AbstractInstaller
         $baseCommand = $this->packageMangerInstallCommand($pm);
 
         return "{$baseCommand} {$deps}";
+    }
+
+    private function updateViteConfig(): void
+    {
+        $configFile = ROOTPATH . 'vite.config.ts';
+        if (!file_exists($configFile)) {
+            $configFile = ROOTPATH . 'vite.config.js';
+        }
+
+        if (!file_exists($configFile)) {
+            return;
+        }
+
+        $content = file_get_contents($configFile);
+
+        // Uncomment import
+        $content = str_replace(
+            "// import tailwindcss from '@tailwindcss/vite'",
+            "import tailwindcss from '@tailwindcss/vite'",
+            $content
+        );
+
+        // Uncomment plugin usage
+        $content = str_replace(
+            "// tailwindcss(),",
+            "tailwindcss(),",
+            $content
+        );
+
+        $this->writeFile($configFile, $content);
     }
 }

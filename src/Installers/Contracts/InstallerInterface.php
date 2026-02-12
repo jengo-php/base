@@ -9,6 +9,8 @@ interface InstallerInterface
     public static function name(): string;
 
     public static function description(): string;
+    
+    public static function reasonForSkipping(): string;
 
     public function install(): void;
 

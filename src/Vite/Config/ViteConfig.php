@@ -13,7 +13,9 @@ class ViteConfig extends BaseConfig
 {
     public array $entrypoints = [];
 
-    public array $searchPaths = [];
+    public array $searchPaths = [
+        APPPATH
+    ];
 
     public function toArray(): array
     {

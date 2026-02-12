@@ -9,31 +9,31 @@ use Jengo\Base\Vite\ViteEntryPointScanner;
 
 class ViteRepository
 {
+    protected ViteConfig $config;
+
     public function __construct()
     {
         helper('Jengo\Base\Helpers\jengo');
+        $this->config = config('ViteConfig');
     }
 
     protected string $cachePath = ROOTPATH . '.jengo/vite_entrypoints.json';
 
-    public function getFullConfig(): ViteConfig
+    public function getFullConfig(bool $reset = false): ViteConfig
     {
-        /**
-         * @var ViteConfig $config
-         */
-        $config = config('ViteConfig');
-
-        $config->entrypoints = array_unique([
-            ...$this->loadEntrypoints(),
-            ...$config->entrypoints
+        $this->config->entrypoints = array_unique([
+            ...$this->loadEntrypoints($reset),
+            ...$this->config->entrypoints
         ]);
 
-        return $config;
+        $this->config->searchPaths = $this->loadSearchPaths();
+
+        return $this->config;
     }
 
-    protected function loadEntrypoints(): array
+    protected function loadEntrypoints(bool $reset = false): array
     {
-        if (isProduction() && file_exists($this->cachePath)) {
+        if (isProduction() && file_exists($this->cachePath) && !$reset) {
             return json_decode(file_get_contents($this->cachePath), true) ?? [];
         }
 
@@ -41,18 +41,36 @@ class ViteRepository
         return (new ViteEntryPointScanner())->scan();
     }
 
-    protected function cacheEntrypoints(array $data): void
+    public function cacheEntrypoints(array $data): void
     {
         if (!is_dir(dirname($this->cachePath))) {
             mkdir(dirname($this->cachePath), 0755, true);
         }
+
+        // delete cache file if exists
+        if (file_exists($this->cachePath)) {
+            unlink($this->cachePath);
+        }
+
         file_put_contents($this->cachePath, json_encode($data, JSON_PRETTY_PRINT));
     }
 
-    public function scan(): void
+    public function scan(bool $reset = false): ViteConfig
     {
-        $config = $this->getFullConfig();
+        $config = $this->getFullConfig($reset);
 
         $this->cacheEntrypoints($config->entrypoints);
+
+        return $config;
+    }
+
+    public function loadSearchPaths(): array
+    {
+        return array_unique([
+            APPPATH,
+            APPPATH . 'Client',
+            ROOTPATH . 'client',
+            ...$this->config->searchPaths,
+        ]);
     }
 }

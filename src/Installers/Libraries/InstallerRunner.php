@@ -29,10 +29,15 @@ class InstallerRunner
 
         if (! $this->skipTracking && $this->tracker->isInstalled($name)) {
             $this->skipped[] = $name;
+            CLI::write("Skipping [$name]...", 'yellow');
+            CLI::write("This installer has already been run.", 'light_yellow');
             return;
         }
 
         if (! $installer->shouldRun()) {
+            $this->skipped[] = $name;
+            CLI::write("Skipping [$name]...", 'yellow');
+            CLI::write($installer::reasonForSkipping(), 'light_yellow');
             return;
         }
 
